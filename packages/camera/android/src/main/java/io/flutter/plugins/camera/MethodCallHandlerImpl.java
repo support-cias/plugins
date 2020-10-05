@@ -123,6 +123,16 @@ final class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
           }
           break;
         }
+      case "enableFlash":
+      {
+        try {
+          camera.setFlash(call.argument("flash"));
+          result.success(null);
+        } catch (Exception e) {
+          handleException(e, result);
+        }
+        break;
+      }
       case "dispose":
         {
           if (camera != null) {
@@ -167,10 +177,8 @@ final class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private void handleException(Exception exception, Result result) {
     if (exception instanceof CameraAccessException) {
       result.error("CameraAccess", exception.getMessage(), null);
-      return;
     }
 
-    // CameraAccessException can not be cast to a RuntimeException.
     throw (RuntimeException) exception;
   }
 }
